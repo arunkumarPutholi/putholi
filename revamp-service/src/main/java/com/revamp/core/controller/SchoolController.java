@@ -91,20 +91,23 @@ public class SchoolController {
 		return ResponseEntity.ok().body(list);
 	}
 
-	
+
 	/**
-	 * 
+	 *
 	 * @param school
 	 * @param request
 	 * @return
 	 */
 	@GetMapping("/getAllSchools")
-	@ResponseBody
 	public ResponseEntity<List<School>> getAll(@RequestBody(required = false) School school,
 			HttpServletRequest request) {
 		List<School> schools = schoolService.getAll();
 		System.out.println("All schools---"+schools);
 		return ResponseEntity.ok().body(schools);
+//		System.out.println("All schools---"+schools.get(0));
+//		return ResponseEntity.ok().body(schools.get(0));
+//		System.out.println("All schools---"+schools.get(0).getSchoolStatus);
+//		return ResponseEntity.ok().body(schools.get(0).getSchoolStatus);
 	}
 
 	/**
