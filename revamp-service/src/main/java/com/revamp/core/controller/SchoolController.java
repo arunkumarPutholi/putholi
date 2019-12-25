@@ -91,6 +91,12 @@ public class SchoolController {
 		return ResponseEntity.ok().body(list);
 	}
 
+	@PutMapping("/updateSchool/{id}/{status}")
+	public ResponseEntity<School> updateUser(@PathVariable long id, @PathVariable String status) {
+		System.out.println("Update school"+id+""+status);
+		School school = schoolService.updateSchoolStatus(id, status);
+		return ResponseEntity.ok().body(school);
+	}
 
 	/**
 	 *
