@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { withRouter,Link } from 'react-router-dom'
 import axios from 'axios'
+import SmallBoxCard from './components/smallBoxCard/SmallBoxCard';
 
 class AdminInvoiceReview extends Component {
 
@@ -125,6 +126,7 @@ createTable=()=>{
   let rowsUpdated=false;
   for(let i=0;i<this.state.requirements.length;i++){
     var reqId=this.state.requirements[i].requirementId;
+    console.log(reqId)
     var quotation=null;
     var invoice=this.state.invoiceList.filter(invoice => parseInt(invoice.requirement.requirementId) === parseInt(reqId));
     console.log(invoice)
@@ -152,6 +154,7 @@ createTable=()=>{
         requirement:this.state.requirements[i],
         ...this.props
       };
+      console.log(invoice[k],this.state.invoiceList[i])
       if(this.props.location.currentUser.role !== "Admin" && (this.props.location.invoice.invoiceStatus === "AdminRejectedInvoice" || this.props.location.invoice.invoiceStatus === "ReviewerRejectedInvoice" || this.props.location.invoice.invoiceStatus === "ApproverRejectedInvoice" ))
         continue
       // console.log(this.props.location.currentUser.role,invoice[0].invoiceStatus,invoice[0].invoiceStatus !== "InvoiceAdded")
@@ -162,7 +165,7 @@ createTable=()=>{
       else if(this.props.location.currentUser.role === "Reviewer" && invoice[k].invoiceStatus !== "AdminReviewedInvoice")
         continue
       // second level filter for admin
-      if(this.props.location.currentUser.role==="Admin" && this.state.invoiceList[i].invoiceStatus === "PAYMENTINITIATED")
+      if(this.props.location.currentUser.role==="Admin" && invoice[k].invoiceStatus === "PAYMENTINITIATED")
         continue
       rowsUpdated=true;
       rows.push(<tr>
@@ -193,72 +196,11 @@ render() {
     return (
       <div className="content-wrapper">
         <section className="content-header">
-          <h1>
-            Trustee / Approver
-            <small />
-          </h1>
-          <ol className="breadcrumb">
-            <li><a href="trustee_Main_Screen.html"><i className="fa fa-dashboard" /> Home</a></li>
-          </ol>
-        </section>
-        <section className="content">
-          <div className="row">
-            <div className="col-lg-3 col-xs-6">
-              <div className="small-box bg-aqua">
-                <div className="inner">
-                  <h4>Total Balance</h4>
-                  <p>Rs. 1,00,000</p>
-                </div>
-                <div className="icon">
-                  <i className="ion ion-bag" />
-                </div>
-                <a href="#" className="small-box-footer"> <i className="fa fa-arrow-circle-right" /></a>
-              </div>
-            </div>
-            {/* ./col */}
-            <div className="col-lg-3 col-xs-6">
-              {/* small box */}
-              <div className="small-box bg-green">
-                <div className="inner">
-                  <h4>Donor Collected Fund<sup style={{fontSize: 20}} /></h4>
-                  <p>Rs. 50,000</p>
-                </div>
-                <div className="icon">
-                  <i className="ion ion-stats-bars" />
-                </div>
-                <a href="#" className="small-box-footer"> <i className="fa fa-arrow-circle-right" /></a>
-              </div>
-            </div>
-            {/* ./col */}
-            <div className="col-lg-3 col-xs-6">
-              {/* small box */}
-              <div className="small-box bg-yellow">
-                <div className="inner">
-                  <h4>Interest Fund</h4>
-                  <p>Rs.5000</p>
-                </div>
-                <div className="icon">
-                  <i className="ion ion-person-add" />
-                </div>
-                <a href="#" className="small-box-footer"> <i className="fa fa-arrow-circle-right" /></a>
-              </div>
-            </div>
-            {/* ./col */}
-            <div className="col-lg-3 col-xs-6">
-              {/* small box */}
-              <div className="small-box bg-red">
-                <div className="inner">
-                  <h4>Trustee Fund</h4>
-                  <p>Rs. 20,000</p>
-                </div>
-                <div className="icon">
-                  <i className="ion ion-pie-graph" />
-                </div>
-                <a href="#" className="small-box-footer"> <i className="fa fa-arrow-circle-right" /></a>
-              </div>
-            </div>
-            {/* ./col */}
-          </div>
+        <div className="row" >
+                        <SmallBoxCard content="Admin"  linkTo="/admin" colour="bg-green"/>
+                        {/* ./col */}
+                        <SmallBoxCard content="Logout" linkTo="/login" colour="bg-red"/>
+                        </div>
           <div className="row">
             <div className="col-xs-12">
               <div className="box">

@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -29,6 +30,7 @@ public interface SchoolRepository extends CrudRepository<School, Long> {
 	void updateSchoolStatus(@Param("id") long id, @Param("status") String status);
 
 	@Modifying
+	@Transactional
 	@Query("UPDATE School s set s.schoolStatus = :status, s.volunteerId = :volunteerId, modifiedDate = now() where s.schoolId = :id")
 	void updateSchoolStatusAndVolunteerId(@Param("id") long id, @Param("status") String status,@Param("volunteerId") Long volunteerId);
 

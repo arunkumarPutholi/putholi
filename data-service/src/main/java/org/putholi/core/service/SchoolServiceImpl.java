@@ -22,7 +22,6 @@ import java.util.*;
 import static java.sql.Types.NULL;
 
 @Service
-@Transactional
 public class SchoolServiceImpl implements SchoolService {
 
 	@Value("${image.path}")
@@ -145,10 +144,7 @@ public class SchoolServiceImpl implements SchoolService {
 			userRepository.updateUserSchoolStatus(school.getVolunteerId(), NULL);
 			schoolRepository.updateSchoolStatusAndVolunteerId(id,status, (long) NULL);
 		}
-		else{
-			schoolRepository.updateSchoolStatus(id, status);
-		}
-		return getImageForSchool(schoolRepository.findById(id).orElse(null));
+		return school;
 	}
 
 	@Override

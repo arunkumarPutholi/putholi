@@ -65,6 +65,11 @@ transform: scale(1.05);
   width: 100%;
 }
 
+.slide1 {
+  display: inline-block;
+  height: 100%;
+  width: 100%;
+}
 .arrow {
   height: 50px;
   width: 50px;

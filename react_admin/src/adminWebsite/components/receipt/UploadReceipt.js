@@ -199,7 +199,8 @@ createTable=()=>{
       if(inv.receipts.length >0)
         count ++;
     })
-    if(count === invoice.length){
+    console.log(count,this.props.location.school.schoolStatus)
+    if(count === invoice.length && this.props.location.school.schoolStatus !== "ADMIN_REJECTED_RECEIPTS"){
       continue
     }
     rowsUpdated=true;
@@ -207,17 +208,17 @@ createTable=()=>{
     var receipts=this.state.invoiceList.filter(invoice => invoice.receipts !== [] || invoice.receipts !== null );
     receiptsCount += receipts.length;
     rows.push(<tr>
-        <td>{invoice.length>0?invoice.map((invoice,j)=>invoice.receipts.length ===0 ?this.state.requirements[i].assetName:null):null}</td>
-        <td>{invoice.length>0?invoice.map((invoice,j)=>invoice.receipts.length ===0 ?<div><button class="btn btn-default" id={invoice.id+"/"+invoice.requirement.requirementId+"/"+j} onClick={(e)=>this.viewInvoice(e)}>{"Invoice " + invoice.id}</button></div>:null):null}</td>
-        <td>{invoice.length>0?invoice.map((invoice,j)=>invoice.receipts.length ===0 ?<div>
+        <td>{invoice.length>0?invoice.map((invoice,j)=>this.state.requirements[i].assetName):null}</td>
+        <td>{invoice.length>0?invoice.map((invoice,j)=><div><button class="btn btn-default" id={invoice.id+"/"+invoice.requirement.requirementId+"/"+j} onClick={(e)=>this.viewInvoice(e)}>{"Invoice " + invoice.id}</button></div>):null}</td>
+        <td>{invoice.length>0?invoice.map((invoice,j)=><div>
             <label for={invoice.id+"/"+invoice.requirement.requirementId} className="btn btn-default" style={{cursor:"pointer",border:"1px solid #d2d6de"}}>{"Upload receipt for invoice "+invoice.id}</label>
-            <input class="hidden" type="file" id={invoice.id+"/"+invoice.requirement.requirementId} onChange={this.handleChange}/></div>:null):null}</td>
+            <input class="hidden" type="file" id={invoice.id+"/"+invoice.requirement.requirementId} onChange={this.handleChange}/></div>):null}</td>
     </tr>)			
   }
   console.log(invCount,receiptsCount)
   if(rowsUpdated === false){
       rows.push(<tr ><td align="center" colSpan="5">No new records found!</td></tr>);
-      if(invCount==receiptsCount){
+      if(invCount==receiptsCount || invCount*2==receiptsCount){
         axios.put(this.props.config+"/updateSchool/"+this.props.location.school.schoolId+"/RECEIPTS_UPLOADED")
       .then(res=>{
         this.setState({

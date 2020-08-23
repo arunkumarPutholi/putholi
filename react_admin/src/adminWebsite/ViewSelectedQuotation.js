@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router'
 import axios from 'axios'
-import '../adminWebsite/css/sliderImage.css';
 import MultipleImage from '../adminWebsite/components/multipleImage/MultipleImage'
+import MultipleImage2 from './components/multipleImage/MultipleImage2'
 
 class ViewSelectedQuotation extends Component {
     state={
@@ -494,7 +494,12 @@ class ViewSelectedQuotation extends Component {
                                 <span aria-hidden="true">×</span></button>
                             </div>
                             <div className="modal-body">
-                            {this.state.otherQuotationImages.length>0 ?<MultipleImage images={this.state.otherQuotationImages}/>:null}
+                                
+                            <div className="row">
+                                <section className="content">
+                            {this.state.otherQuotationImages.length>0 ?<MultipleImage2 images={this.state.otherQuotationImages}/>:null}
+                            </section>
+                            </div>
                         </div>
                       </div>    
                     </div>

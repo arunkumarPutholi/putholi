@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -22,6 +23,7 @@ public interface UserRepository extends CrudRepository<User, Long> {
     void updateUserStatus(@Param("id") long id, @Param("status") String status);
 
 	@Modifying
+	@Transactional
 	@Query("UPDATE User u set u.school_id = :school_id, modifiedDate = now() where u.userid = :id")
 	void updateUserSchoolStatus(@Param("id") long id, @Param("school_id") long school_id);
 

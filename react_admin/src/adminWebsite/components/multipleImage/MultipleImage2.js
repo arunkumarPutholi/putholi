@@ -2,7 +2,7 @@ import React, { PureComponent, Component } from 'react'
 import { withRouter } from 'react-router';
 import './sliderImage.css';
 
-class MultipleImage extends Component {
+class MultipleImage2 extends Component {
     state={
         currentIndex: 0,
         translateValue: 0,
@@ -67,7 +67,7 @@ class MultipleImage extends Component {
     }));
     }
     slideWidth = () => {
-         return document.querySelector('.slide').clientWidth
+         return document.querySelector('.slide1').clientWidth
     }
     render() {
         const Slide = ({ image }) => {
@@ -77,7 +77,7 @@ class MultipleImage extends Component {
               backgroundRepeat: 'no-repeat',
               backgroundPosition: '50% 60%'
             }
-            return <div className="slide" style={styles}></div>
+            return <div className="slide1" style={styles}></div>
           }
       
           const LeftArrow = (props) => {
@@ -131,4 +131,4 @@ class MultipleImage extends Component {
         )
     }
 }
-export default withRouter(MultipleImage);
+export default withRouter(MultipleImage2);
