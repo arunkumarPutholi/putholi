@@ -94,10 +94,11 @@ public class InvoiceServiceImpl implements InvoiceService {
 				siSet.add(si);
 				finalInvoice.setReceipts(siSet);
 			});
+			finalInvoice.setIsReceiptAdded("Y");
+			// Save invoice
+			repository.save(finalInvoice);
 		}
 
-		// Save invoice
-		repository.save(invoice);
 		return invoice.getId();
 	}
 

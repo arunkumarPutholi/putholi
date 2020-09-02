@@ -162,15 +162,16 @@ saveReceipt=(invoiceId,requirementId,receipt)=>{
       window.alert("Failed to save receipt due to "+error);
   })
   let updateList=(receipt,invoiceId)=>{
-      let invoice = this.state.invoiceList.filter(invoice => parseInt(invoice.id) === parseInt(invoiceId))
-      console.log(invoice)
-      let ql=invoice[0];
-      ql.receipts=receipt;
-      let a=this.state.invoiceList;
-      a[invoiceId]=ql;
-      console.log(a,ql);
+      let inv = this.state.invoiceList.map(invoice => {
+        if(parseInt(invoice.id) === parseInt(invoiceId)){
+          invoice.receipts=receipt;
+        }
+        return invoice;
+      }
+      );
+      console.log(inv)
       this.setState({
-          invoiceList:a,
+          invoiceList:inv,
       })
   }
 }
@@ -191,34 +192,42 @@ createTable=()=>{
   }
   for(let i=0;i<this.state.requirements.length;i++){
     var reqId=this.state.requirements[i].requirementId;
+    var allReceiptsAdded=true;
+    console.log(this.state.invoiceList) 
     // filter will always return a list
-    var invoice=this.state.invoiceList.filter(invoice => parseInt(invoice.requirement.requirementId) === parseInt(reqId));
-    console.log(invoice)  
+    var invoice=null;
+    if(this.props.location.school.schoolStatus === "ADMIN_REJECTED_RECEIPTS"){
+      invoice=this.state.invoiceList.filter(invoice => parseInt(invoice.requirement.requirementId) === parseInt(reqId));
+    }
+    else{
+      invoice=this.state.invoiceList.filter(invoice => parseInt(invoice.requirement.requirementId) === parseInt(reqId) && invoice.receipts !== undefined && invoice.receipts !==null && invoice.receipts.length=== 0);
+    }
+    console.log(invoice) 
     let count =0;
     invoice.map(inv=>{
       if(inv.receipts.length >0)
         count ++;
+      if(inv.isReceiptAdded !== "Y")
+        allReceiptsAdded=false;
     })
     console.log(count,this.props.location.school.schoolStatus)
-    if(count === invoice.length && this.props.location.school.schoolStatus !== "ADMIN_REJECTED_RECEIPTS"){
+    if(count >= invoice.length && this.props.location.school.schoolStatus !== "ADMIN_REJECTED_RECEIPTS"){
       continue
     }
     rowsUpdated=true;
-    invCount += invoice.length;
-    var receipts=this.state.invoiceList.filter(invoice => invoice.receipts !== [] || invoice.receipts !== null );
-    receiptsCount += receipts.length;
+    // var receipts=this.state.invoiceList.filter(invoice => invoice.receipts !== [] || invoice.receipts !== null );
+    // receiptsCount += receipts.length;
     rows.push(<tr>
-        <td>{invoice.length>0?invoice.map((invoice,j)=>this.state.requirements[i].assetName):null}</td>
+        <td>{invoice.length>0?invoice.map((invoice,j)=>j===0?this.state.requirements[i].assetName:""):null}</td>
         <td>{invoice.length>0?invoice.map((invoice,j)=><div><button class="btn btn-default" id={invoice.id+"/"+invoice.requirement.requirementId+"/"+j} onClick={(e)=>this.viewInvoice(e)}>{"Invoice " + invoice.id}</button></div>):null}</td>
         <td>{invoice.length>0?invoice.map((invoice,j)=><div>
             <label for={invoice.id+"/"+invoice.requirement.requirementId} className="btn btn-default" style={{cursor:"pointer",border:"1px solid #d2d6de"}}>{"Upload receipt for invoice "+invoice.id}</label>
             <input class="hidden" type="file" id={invoice.id+"/"+invoice.requirement.requirementId} onChange={this.handleChange}/></div>):null}</td>
     </tr>)			
   }
-  console.log(invCount,receiptsCount)
   if(rowsUpdated === false){
       rows.push(<tr ><td align="center" colSpan="5">No new records found!</td></tr>);
-      if(invCount==receiptsCount || invCount*2==receiptsCount){
+      if(allReceiptsAdded){
         axios.put(this.props.config+"/updateSchool/"+this.props.location.school.schoolId+"/RECEIPTS_UPLOADED")
       .then(res=>{
         this.setState({

@@ -1,9 +1,7 @@
 package org.putholi.core.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.putholi.core.model.Invoice;
-import org.putholi.core.model.Payload;
-import org.putholi.core.model.SchoolRegFormModel;
+import org.putholi.core.model.*;
 import org.putholi.core.service.InvoiceService;
 import org.putholi.core.web.util.WebUtilities;
 import org.slf4j.Logger;
@@ -16,10 +14,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 
@@ -99,9 +95,23 @@ public class InvoiceController {
 	}
 
 	@GetMapping("/invoice/getPaid/{school_id}")
-	public ResponseEntity<List<Invoice>> getAllPadiInvoice(@PathVariable("school_id") long schoolId) {
+	public ResponseEntity<List<Invoice>> getAllPaidInvoice(@PathVariable("school_id") long schoolId) {
 		return ResponseEntity.ok().body(invoiceService.getPaidInvoiceBySchoolId(schoolId));
 	}
+//	public ResponseEntity<Map<Long,List<Invoice>>> getAllPaidInvoice(@PathVariable("school_id") long schoolId) {
+//		List<Invoice> invoices=invoiceService.getPaidInvoiceBySchoolId(schoolId);
+//		Map<Long,List<Invoice>> paidInvoices=invoices.stream().collect(Collectors.groupingBy(Invoice::getId));
+//		paidInvoices.forEach((k,invoiceList)->{
+//			invoiceList.forEach(inv->{
+//				if(inv.getReceipts() == null){
+//					Set<Receipt> receipts = new HashSet<>();
+//					inv.setReceipts(receipts);
+//				}
+//			});
+//		});
+//		return ResponseEntity.ok().body(paidInvoices);
+//	}
+
 
 	@GetMapping("/invoice/requirement/{school_id}")
 	public ResponseEntity<List<Invoice>> getInvoiceByRequrementid(@PathVariable("school_id") long schoolId) {

@@ -128,4 +128,7 @@ public class Invoice extends AuditableEntity {
 
 	@Column(name="approver_comments")
 	private String approverComments;
+
+	@Column(name="is_receipt_added")
+	private String isReceiptAdded;
 }
